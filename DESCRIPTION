@@ -1,0 +1,19 @@
+Package: TSAUMN
+Title: Time Series Analysis Tools Used in ESCI5201 at the University of Minnesota
+Version: 0.0.0.9000
+Authors@R: person( "Justin", "Revenaugh", email = "justinr@umn.edu", role = c("aut", "cre"))
+Description: Tools for spectral analysis (including higher-order statistics), filtering, interpolation and resampling, and visualization.  Many of the tools included in the package exist elsewhere in the R universe, but have inconsistent definitions and inputs/outputs that mesh poorly.  New tools include fast hadamard and walsh transforms, multi taper bispectral estimation and Lanczos filters.
+Depends: R (>= 3.4.0)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports:
+	RColorBrewer,
+	signal,
+	multitaper,
+	tidyverse,
+	palinsol,
+	scales,
+	imputeTS,
+	pracma
+RoxygenNote: 6.0.1
