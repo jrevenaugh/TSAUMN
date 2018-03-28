@@ -24,7 +24,12 @@ MAD criterion to identify outliers, and kalman smoothing.  Algorithm
 is recursive and continues until no further outliers are found.
 }
 \examples{
-s.df <- data.frame( time = 1:100, s = sin( 2 * pi * 1:100 / 20 ) )
-s.ts <- df2ts( s.df, "time" )
+y <- arimaSim( 200, ar = c( 0.5, -0.1 ) )
+# Add a few outliers
+o <- floor( runif( 5, min = 5, max = 195 ) )
+y[o] <- runif( 5, min = 4, max = 8 )
+yc <- joutlier( y )
+plot( y )
+lines( yc, col = "red" )
 
 }

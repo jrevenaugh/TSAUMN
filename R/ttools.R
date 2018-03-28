@@ -5,7 +5,7 @@
 #' @param time character vector name of time column or its numeric index.
 #' @return ts object with converted data.frame object.
 #' @export
-#' @import "dplyr"
+#' @importFrom dplyr select
 #' @examples
 #' s.df <- data.frame( time = 1:100, s = sin( 2 * pi * 1:100 / 20 ) )
 #' s.ts <- df2ts( s.df, "time" )
@@ -14,9 +14,8 @@ df2ts <- function( df, time ) {
   if( !is.data.frame( df ) ) stop( "Input not a data.frame" )
   t <- df[, time]
   st <- min( t )
-  et <- max( t )
   dt <- t[2] - t[1]
-  ts( data = dplyr::select( df, -time ), start = st, end = et, deltat = dt )
+  ts( data = dplyr::select( df, -one_of( time ) ), start = st, deltat = dt )
 }
 
 #' Convert ts object to a data.frame

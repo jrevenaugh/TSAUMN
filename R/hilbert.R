@@ -1,9 +1,9 @@
 #' Hilbert transform
 #'
-#' Compute hilbert transform using FFT 
+#' Compute hilbert transform using FFT
 #' @param s vector of timeseries samples or ts object.
 #' NA values are not allowed.
-#' @return Complex valued hilbert transform of x. 
+#' @return Complex valued hilbert transform of x.
 #' @export
 #' @examples
 #' s <- sin( 2 * pi * 1:256 * 0.05 )
@@ -23,15 +23,16 @@ hilbert <- function( s ) {
     h[1] <- 1
     h[2:( ( n + 1 ) / 2 )] <- 2
   }
-  return( fft( S * h, inverse = TRUE ) / n )
+  ht <- fft( S * h, inverse = TRUE ) / n
+  return( ht[1:l] )
 }
 
 #' Envelope using analytic signal
 #'
-#' Compute envelope (instantaneous amplitude) of a time series using hilbert transform 
+#' Compute envelope (instantaneous amplitude) of a time series using hilbert transform
 #' @param s vector of timeseries samples or ts object.
 #' NA values are not allowed.
-#' @return Real valued (non-negative) envelope of x. 
+#' @return Real valued (non-negative) envelope of x.
 #' @export
 #' @examples
 #' s <- sin( 2 * pi * 1:256 * 0.05 )

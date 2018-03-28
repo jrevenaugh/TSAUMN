@@ -4,7 +4,7 @@
 \alias{pcaVar}
 \title{Cumulative variance reduction}
 \usage{
-pcaVar(p, plot = T, n = length(p$sdev))
+pcaVar(p, plot = TRUE, n = length(p$sdev))
 }
 \arguments{
 \item{p}{"prcomp" list from \code{\link{prcomp}}}

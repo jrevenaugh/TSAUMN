@@ -1,6 +1,6 @@
 #' Time-Frequency Analysis
 #'
-#' Compute evolutive spectrum using direct FFT method 
+#' Compute evolutive spectrum using direct FFT method
 #' @param s vector of timeseries samples or ts object.  If the former, deltat should be specified,
 #' NA values are not allowed.
 #' @param deltat sampling interval of time series.  Ignored if s is a ts object
@@ -30,10 +30,10 @@
 #' # plot result
 #' plotFTSpec( evol )
 
-evolFFT <- function ( s, deltat = 1, 
-                      nfft = 1024, nwin, nstep, 
+evolFFT <- function ( s, deltat = 1,
+                      nfft = 1024, nwin, nstep,
                       fl = 0, fh = 0.5 / deltat ) {
-  
+
   n = length( s )
   if ( n < 64 ) stop( "Really?  Way too short of a time series." )
   nyquist = 0.5 / deltat
@@ -68,13 +68,13 @@ evolFFT <- function ( s, deltat = 1,
   freqs = seq( 0, nyquist, length.out = ( nfft / 2 + 1 ) )
   fout <- which( freqs >= fl & freqs <= fh )
   nout <- length( fout )
-  list( signal = s, deltat = deltat, numfreqs = nout, DSPEC = EP[fout,], 
+  list( signal = s, deltat = deltat, numfreqs = nout, DSPEC = EP[fout,],
              freqs = freqs[fout], tims = t, wpars = list( fl = fl, fh = fh, nwin = nwin ) )
 }
 
 #' Time-Frequency Analysis
 #'
-#' Compute evolutive spectrum using MTM method 
+#' Compute evolutive spectrum using MTM method
 #' @param s vector of timeseries samples or ts object.  If the former, deltat should be specified,
 #' NA values are not allowed.
 #' @param deltat sampling interval of time series.  Ignored if s is a ts object
@@ -106,9 +106,9 @@ evolFFT <- function ( s, deltat = 1,
 #' # plot result
 #' plotFTSpec( evol )
 evolMTM <- function ( s, deltat = 1, nw = 4, k = 7,
-                      nfft = 1024, nwin, nstep, 
+                      nfft = 1024, nwin, nstep,
                       fl = 0, fh = 0.5 / deltat ) {
-  
+
   n = length( s )
   if ( n < 64 ) stop( "Really?  Way too short of a time series." )
   nyquist = 0.5 / deltat
@@ -124,7 +124,7 @@ evolMTM <- function ( s, deltat = 1, nw = 4, k = 7,
     warning( noquote( "Adjusted number of fft frequencies." ) )
     nfft <- nextn( nfft, 2 )
   }
-  
+
   kcol <- floor( ( n - nwin ) / nstep ) + 1
   krow <- nfft + 1
   df <- 1 / ( nfft * deltat )
@@ -142,6 +142,6 @@ evolMTM <- function ( s, deltat = 1, nw = 4, k = 7,
   freqs = seq( 0, nyquist, length.out = krow )
   fout <- which( freqs >= fl & freqs <= fh )
   nout <- length( fout )
-  list( signal = s, deltat = deltat, numfreqs = nout, DSPEC = EP[fout,], 
+  list( signal = s, deltat = deltat, numfreqs = nout, DSPEC = EP[fout,],
         freqs = freqs[fout], tims = t, wpars = list( fl = fl, fh = fh, nwin = nwin ) )
 }

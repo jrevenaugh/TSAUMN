@@ -11,7 +11,7 @@
 #' p <- prcomp(USArrests, scale = TRUE)
 #' pcaVar( p )
 #' 
-pcaVar <- function( p, plot = T, n = length( p$sdev ) ) {
+pcaVar <- function( p, plot = TRUE, n = length( p$sdev ) ) {
   
   # Compute variance and cumulative variance reduction
   eig <- p$sdev^2

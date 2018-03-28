@@ -9,7 +9,7 @@ plotFTSpec(evol, Log = F, Period = F,
   xlab = "Time", ylab = "Frequency", dynRange = 0)
 }
 \arguments{
-\item{evol}{return value of \code{\link{evolfft}} or \code{\link{evolMTM}}}
+\item{evol}{return value of \code{\link{evolFFT}} or \code{\link{evolMTM}}}
 
 \item{Log}{plot log10 of power spectrum, defaults to FALSE}
 
@@ -24,7 +24,7 @@ plotFTSpec(evol, Log = F, Period = F,
 \item{dynRange}{orders of magnitude beneath peak to include in color scale.  Defaults to full range.}
 }
 \description{
-Plot output of \code{\link{evolfft}} and \code{\link{evolMTM}} in \code{\link{RSEIS}}
+Plot output of \code{\link{evolFFT}} and \code{\link{evolMTM}} in \code{\link{TSAUMN}}
 }
 \examples{
 require( RColorBrewer )

@@ -15,5 +15,24 @@ Imports:
 	palinsol,
 	scales,
 	imputeTS,
-	pracma
+	Rssa,
+	tseries,
+	audio,
+	forecast,
+	KFKSDS,
+	markovchain,
+	pracma,
+	sapa,
+	stinepack,
+	timsac,
+	trend,
+	TSA,
+	tsoutliers,
+	lomb,
+	ltsa,
+	scales
+Suggests:
+	mosaic,
+	cowplot,
+	zoo
 RoxygenNote: 6.0.1

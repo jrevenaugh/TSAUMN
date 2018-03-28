@@ -116,31 +116,3 @@ lanczos_bp <- function( n, low, high ) {
   return( w )
 }
 
-#' Compute Lanczos filter amplitude and phase (not unwound) spectra
-#'
-#' Compute Lanczos filter amplitude spectrum 
-#' @param w filter coefficients returned by \code{\link{lanczos}}
-#' @param n zero-padded length of filter to transform
-#' @return data.frame containing amplitude and phase spectrum of filter for non-negative frequencies (DC to Nyquist).
-#'  \item{"freq"}{Fourier frequencies (0 to Nyquist)}
-#'  \item{"amp"}{Fourier amplitude spectrum of filter}
-#'  \item{"phase"}{Fourier phase spectrum of filter}
-#' @export
-#' @examples
-#' f <- lanczos_bp( 7, 0.1, 0.4 )
-#' s <- lanczos_spec( f, 512 )
-#' plot( s$freq, s$amp, type = "l", xlab = "Frequency", ylab = "Amplitude" )
-#' 
-lanczos_spec <- function( w, nPts ) {
-  n <- nextn( nPts, 2 ) + 1
-  h <- rep( 0, n )
-  h[1:length( w )] <- w
-  h <- h + rev( h )
-  nf <- ( n - 1 ) / 2 + 1
-  H <- fft( h[-n] )[1:nf]
-  amp <- Mod( Conj( H ) * H )
-  phase <- Arg( H )
-  freq <- seq( 0, 0.5, length.out = nf )
-  return( data.frame( freq = freq, amp = amp, phase = phase ) )
-}
-  

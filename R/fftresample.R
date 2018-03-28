@@ -78,16 +78,19 @@ fftdecimate <- function( s, nfac = 2, pct = 0.025, deltat = 1 )
     start <- 0
   }
   n <- length( s )
-  m <- nextn( nextn( n, 2 ), c( nfac ) )
+  m <- nextn( nextn( n, 2 ), nfac )
   s <- c( s * costap( n, pct ), rep( 0, m - n ) )
-  M <- m / nfac
   S <- fft( s )
-  nyq <- M / 2 + 1
-  H <- c( S[1:(nyq - 1)], complex( Mod( S[nyq] ), 0 ), Conj( S[(nyq - 1):2] ) )
+  nnyq <- m / ( 2 * nfac ) + 1
+  H <- rep( 0 + 0i, m )
+  H[1:nnyq] <- S[1:nnyq]
+  H <- H + Conj( c( 0, rev( H[-1] ) ) )
   h <- fft( H, inverse = T ) / m
-  s <- Re( h[1:floor(n / nfac)] )
+  ind <- seq( 1, n, nfac )
+  s <- Re( h[ind] )
   s <- ts( s, deltat = deltat * nfac, start = start )
   return( s )
 }
+
 
 

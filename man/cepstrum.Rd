@@ -27,6 +27,6 @@ s <- s + rnorm( length( t ), sd = 0.5 )
 c <- cepstrum( s, taper = "akaike" )
 ggplot( c, aes( x = quefrency, y = cepstrum ) ) + geom_line() +
 labs( x = "Quefrency", y = "Cepstrum" )
-
+# harmonics spaced at 0.05 produce peak at quefrency of 20 (1 / 20 = 0.05 )
 
 }

@@ -15,7 +15,7 @@
 #' s <- ts( sin( 2 * pi * 1:512 / 32 ) + rnorm( 512, sd = 0.25 ), deltat = 1 )
 #' mspec <- spec.mtm( s, jackknife = TRUE, plot = FALSE )
 #' mtm.plot( mspec, jack = TRUE, period = TRUE, trans = "log10" )
-mtm.plot <- function( mspec, jack = FALSE, period = F, trans = c( "identity", "log10", "sqrt" ) )
+gplot.mtm <- function( mspec, jack = FALSE, period = F, trans = c( "identity", "log10", "sqrt" ) )
 {
   pTrans <- match.arg( trans )
   f <- mspec$freq
@@ -58,13 +58,13 @@ mtm.plot <- function( mspec, jack = FALSE, period = F, trans = c( "identity", "l
        ys <- ggplot2::scale_y_continuous(trans = pTrans, limits = c( s.min, s.max ), 
                          breaks = scales::trans_breaks(pTrans, function(x) 10^x),
                          labels = scales::trans_format(pTrans, scales::math_format(10^.x) ) )
-       ll <- ggplot2::labs( y = "Log Power" )
+       ll <- ggplot2::labs( y = "Power" )
 }
   else {
        ys <- ggplot2::scale_y_continuous(trans = pTrans, limits = c( s.min, s.max ),
                              breaks = scales::trans_breaks(pTrans, function(x) x^2 ),
                              labels = scales::trans_format(pTrans, scales::math_format(.x) ) )
-       ll <- ggplot2::labs( y = "Root Power" )
+       ll <- ggplot2::labs( y = "Power" )
        
   }                    
   g <- g + ys + ll      
@@ -93,7 +93,7 @@ mtm.plot <- function( mspec, jack = FALSE, period = F, trans = c( "identity", "l
 #' mspec <- spec.mtm( s, Ftest = TRUE, plot = FALSE )
 #' mtm.ftest( mspec )
 #' 
-mtm.ftest <- function( mspec, uci = 0.95, period = F, trans = c( "identity", "log10", "sqrt" ) )
+gplot.mtm.ftest <- function( mspec, uci = 0.95, period = F, trans = c( "identity", "log10", "sqrt" ) )
 {
   if( is.null( mspec$mtm$Ftest ) ) {
     stop( "Must include 'Ftest = TRUE' in spec.mtm call.")
@@ -103,7 +103,7 @@ mtm.ftest <- function( mspec, uci = 0.95, period = F, trans = c( "identity", "lo
   if ( period ) freq <- 1.0 / freq[-1]
   n <- length( freq )
   f.max <- 1.05 * max( freq )
-  if ( period ) f.max <- max( freq ) ^ 1.02
+  if ( period ) f.max <- max( freq )^1.02
   f <- mspec$mtm$Ftest
   if ( period ) f <- f[-1]
   k <- mspec$mtm$k
@@ -127,7 +127,7 @@ mtm.ftest <- function( mspec, uci = 0.95, period = F, trans = c( "identity", "lo
   for ( i in 1:length( fl ) ) {
     g <- g + ggplot2::geom_line( aes_string( y = nms[i + 3] ), lty = 3 )
     l <- format( fq[i] )
-    g <- g + ggplot2::annotate( "text", x = f.max, y = fl[i], label = l )
+    if ( !period ) g <- g + ggplot2::annotate( "text", x = f.max, y = fl[i], label = l )
   }
 
   if ( pTrans == "sqrt" ) {
@@ -143,6 +143,70 @@ mtm.ftest <- function( mspec, uci = 0.95, period = F, trans = c( "identity", "lo
     xs <- ggplot2::scale_x_continuous(trans = "log10", 
                              breaks = scales::trans_breaks("log10", function(x) 10^x),
                              labels = scales::trans_format("log10", scales::math_format(10^.x) ) )
+    g <- g + xs + ggplot2::labs( x = "Period" ) + ggplot2::annotation_logticks( sides = "tb" )
+  }
+  return( g )
+}
+
+#' Plot coherence results from \code{\link{mtm.coh}}
+#'
+#' Attractive \link{ggplot2} plot of \code{\link{spec.mtm}} F-test output  
+#' @param mcoh \code{\link{mtm.coh}} output
+#' @param uci upper confidence interval to highlight in plot
+#' @param period display MSC against period, rather than frequency, if TRUE 
+#' @param trans apply atanh (aka Fisher) transform to the MSC; defaults to no transform
+#' @return a ggplot2 object
+#' @export
+#' @import "ggplot2"
+#' @import "scales"
+#' @examples
+#' s <- ts( sin( 2 * pi * 1:512 / 32 ) + rnorm( 512 ), deltat = 1 )
+#' mspec <- spec.mtm( s, Ftest = TRUE, plot = FALSE )
+#' mtm.ftest( mspec )
+#' 
+gplot.mtm.coh <- function( mcoh, uci = 0.95, period = F, trans = c( "identity", "atanh" ) )
+{
+  pTrans <- match.arg( trans )
+  freq <- mcoh$freq
+  if ( period ) freq <- 1.0 / freq[-1]
+  n <- length( freq )
+  f.max <- 1.05 * max( freq )
+  if ( period ) f.max <- max( freq ) ^ 1.02
+  msc <- mcoh$msc
+  if ( period ) msc <- msc[-1]
+  K <- mcoh$k
+  mc <- 1 - ( 1 - uci )^( 1/ ( K - 1 ) )
+  alpha <- c( 0.5, 0.9, 0.95, 0.99 )
+  ml <- 1 - ( 1 - alpha )^( 1/ ( K - 1 ) )
+
+  MSC <- data.frame( freq, msc, rep( mc, n ) ) 
+  nms <- c( "Frequency", "MSC", "Crit" )
+  
+  for ( i in 1:length( ml ) ) {
+    MSC <- cbind( MSC, rep( ml[i], n ) )
+    nms <- c( nms, sprintf( "ML%d", i ) )
+  }
+  colnames( MSC ) = nms
+  g <- ggplot2::ggplot( MSC, aes( x = Frequency ) ) + 
+    ggplot2::labs( y = "MSC" )
+  g <- g + ggplot2::geom_line( aes( y = MSC ) )
+  g <- g + ggplot2::geom_line( aes( y = Crit ), color = "red" )
+  g <- g + ggplot2::geom_ribbon( aes( ymin = 0, ymax = Crit ), alpha = 0.1 )
+  for ( i in 1:length( ml ) ) {
+    g <- g + ggplot2::geom_hline( yintercept = ml[i] , lty = 3 )
+    l <- format( alpha[i] )
+    g <- g + ggplot2::annotate( "text", x = f.max, y = ml[i], label = l )
+  }
+  
+  if ( pTrans == "atanh" ) {
+    ys <- ggplot2::scale_y_continuous(trans = "atanh" )
+    g <- g + ys
+  } 
+  
+  if ( period ) {
+    xs <- ggplot2::scale_x_continuous(trans = "log10", 
+                                      breaks = scales::trans_breaks("log10", function(x) 10^x),
+                                      labels = scales::trans_format("log10", scales::math_format(10^.x) ) )
     g <- g + xs + ggplot2::labs( x = "Period" ) + ggplot2::annotation_logticks( sides = "tb" )
   }  
   
