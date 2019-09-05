@@ -10,6 +10,7 @@ LazyData: true
 Imports:
 	RColorBrewer,
 	signal,
+	prettydoc,
 	multitaper,
 	tidyverse,
 	palinsol,

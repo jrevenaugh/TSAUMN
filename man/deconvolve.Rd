@@ -15,7 +15,7 @@ deconvolve(s, f, type = c("wl", "dls", "noreg"), alpha = 0.1,
 \item{type}{one of water-level ("wl", default), damped "least squqres" ("dls") or no regularization ("noreg").
 See detail for more information}
 
-\item{alpha}{multiplier of the max or median value of the denominator for the corresponding \mode{metric},
+\item{alpha}{multiplier of the max or median value of the denominator for the corresponding \code{metric},
 If \code{metric} is "percentile", this specifies the percentile value of the denominator to use in regularization.}
 
 \item{metric}{one of "max" (default), "median" or "percentile."  Together with \code{alpha} this determines
@@ -34,7 +34,7 @@ If the convolved filter has spectral zeros
 it is common to regularize the denominator during spectral division (deconvolution in the frequency domain).
 Two methods are provided. (1) water-level ("wl") doesn't allow the value of the denominator to drop below the scaled metric.
 Visually, the denominator plotted against frequency is filled with water up to the scaled metric, thus
-filling in "holes."  (2) damped "least-squares" ("dls") simply adds the scaled metric to the 
+filling in "holes."  (2) damped "least-squares" ("dls") simply adds the scaled metric to the
 denominator at all frequencies.  Visually, this shifts the baseline of the denominator up.  While this
 reduces the noise-amplification of zeros and near-zeros, it biases results at all frequencies.
 Type "noreg" applies no regularization and will produce useless results for noisy inputs.
@@ -42,7 +42,7 @@ Type "noreg" applies no regularization and will produce useless results for nois
 The scaled metric is one of: alpha * max( D ), alpha * median( D ) or quantile( D, alpha ) where D
 is the denominator (function of frequency).
 
-Deconvolution is circular.  Long filters will cycle around.  
+Deconvolution is circular.  Long filters will cycle around.
 Padding \code{s} prior to deconvolution is often desirable.
 }
 \examples{
