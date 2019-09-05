@@ -4,7 +4,8 @@
 \alias{lanczos}
 \title{Create a Lanczos filter}
 \usage{
-lanczos(n = 7, type = c("lp", "hp", "bp", "br"), low = 0, high = 0.5)
+lanczos(n = 7, type = c("lp", "hp", "bp", "br"), low = 0,
+  high = 0.5)
 }
 \arguments{
 \item{n}{length of filter; must be odd}

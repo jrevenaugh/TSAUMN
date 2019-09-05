@@ -4,8 +4,8 @@
 \alias{gplot.mtm}
 \title{Plot results from \code{\link{spec.mtm}}}
 \usage{
-gplot.mtm(mspec, jack = FALSE, period = F, trans = c("identity", "log10",
-  "sqrt"))
+gplot.mtm(mspec, jack = FALSE, period = F, trans = c("identity",
+  "log10", "sqrt"))
 }
 \arguments{
 \item{mspec}{\code{\link{spec.mtm}} output}

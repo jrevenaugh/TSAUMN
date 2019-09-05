@@ -4,8 +4,8 @@
 \alias{fviz}
 \title{Plot amplitude and phase of linear filter}
 \usage{
-fviz(h, type = c("centered", "causal", "symmetric", "arma"), phase = TRUE,
-  hide = FALSE, twoway = FALSE)
+fviz(h, type = c("centered", "causal", "symmetric", "arma"),
+  phase = TRUE, hide = FALSE, twoway = FALSE)
 }
 \arguments{
 \item{h}{filter coefficients; see details below}

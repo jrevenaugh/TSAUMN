@@ -4,7 +4,7 @@
 \alias{plotFTSpec}
 \title{Plot fourier/time spectral analysis}
 \usage{
-plotFTSpec(evol, Log = F, Period = F,
+plotFTSpec(evol, Log = F, fscale = c("Frequency", "Octave", "Period"),
   pal = colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))(256),
   xlab = "Time", ylab = "Frequency", dynRange = 0)
 }
@@ -13,7 +13,7 @@ plotFTSpec(evol, Log = F, Period = F,
 
 \item{Log}{plot log10 of power spectrum, defaults to FALSE}
 
-\item{Period}{plot spectrum against period rather than frequency, defaults to FALSE}
+\item{fscale}{one of "Frequency" (default), "Period" or "Octave" The latter two display period on a log10 scale and frequency on a log2 scale respectively. plot log2 of frequency, defaults to FALSE}
 
 \item{pal}{color palette, defaults to a dark spectrum}
 
